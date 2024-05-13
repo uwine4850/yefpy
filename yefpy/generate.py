@@ -1,10 +1,9 @@
 import inspect
 import os
-from typing import List
 
 from ruamel.yaml import YAML
-import yef
-from module.mod_data import MethodInfo, ClassInfo, Module, ModuleInfo, FuncInfo
+from yefpy import yef
+from yefpy.mod_data import MethodInfo, ModuleInfo, FuncInfo
 
 yaml = YAML()
 
@@ -29,7 +28,9 @@ class YamlModData:
 
 
 def get_yaml_modules_data(modules_info: list[ModuleInfo]) -> list[YamlModData]:
-    # yaml_modules: dict[Module, list[YamlClassData]] = {}
+    """
+    Converts information about a python module into a format that is used to generate a yaml file.
+    """
     mod_data: list[YamlModData] = []
     for mod_info in modules_info:
         yaml_class_data: list[YamlClassData] = []
@@ -44,8 +45,6 @@ def get_yaml_modules_data(modules_info: list[ModuleInfo]) -> list[YamlModData]:
             yaml_func = YamlFuncData(func_info.name, func_info)
             yaml_func_data.append(yaml_func)
         mod_data.append(YamlModData(mod_info, yaml_class_data, yaml_func_data))
-        # yaml_modules[mod_info] = yaml_class_data
-    # return yaml_modules
     return mod_data
 
 
@@ -65,6 +64,9 @@ def _handle_init(cls: YamlClassData) -> list[dict[str, str]]:
 
 
 def _handle_class_method(cls: YamlClassData) -> dict:
+    """
+    Processes the passed class data and converts it into a dictionary for describing yaml data.
+    """
     class_methods_data = {}
     for method_name, method in cls.methods_info.items():
         if method_name == "__init__":
@@ -93,6 +95,9 @@ def _handle_module_func(func: YamlFuncData) -> dict:
 
 
 def generate_yaml(ymd: list[YamlModData], filename: str, gen_dir_path: str):
+    """
+    Generates a yaml file that contains data about python modules.
+    """
     yaml_data: dict = {'modules': {}}
     for module_data in ymd:
         module = module_data.mod_info.module

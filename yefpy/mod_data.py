@@ -1,6 +1,6 @@
 import importlib
 import inspect
-import yef
+from yefpy import yef
 
 
 class MethodParam:
@@ -58,6 +58,10 @@ def get_classes(module) -> list:
 
 
 def get_class_info(class_) -> ClassInfo:
+    """
+    Getting information about a class from a module.
+    Only classes that inherit from the yef.YefClass class are processed.
+    """
     methods_info: dict[str, MethodInfo] = {}
     methods = [method for method in inspect.getmembers(class_) if method[0].startswith("_") == False and not method[1].
         __qualname__.startswith(yef.YefClass.__name__)]
@@ -72,6 +76,9 @@ def get_class_info(class_) -> ClassInfo:
 
 
 def get_module_functions_info(module) -> list[FuncInfo]:
+    """
+    Obtaining data about module functions.
+    """
     functions_info: list[FuncInfo] = []
     members = inspect.getmembers(module)
     functions = [func for _, func in members if inspect.isfunction(func) and inspect.getmodule(func) == module]
@@ -84,6 +91,9 @@ def get_module_functions_info(module) -> list[FuncInfo]:
 
 
 def get_modules_info(modules: list[Module]) -> list[ModuleInfo]:
+    """
+    Receiving data about modules. It also uses the get_class_info and get_class_info functions to retrieve the relevant information.
+    """
     modules_info: list[ModuleInfo] = []
     for module in modules:
         module_classes_info: list[ClassInfo] = []
