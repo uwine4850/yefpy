@@ -1,5 +1,7 @@
 Дана бібліотека генерує конфігураційний файл для його використанні у https://github.com/uwine4850/yefgo.
 
+Встановлення `pip install yefpy-uwine`
+
 Більш детальний приклад використання - https://github.com/uwine4850/yefexample.
 
 ## Приклад використання
